@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import { supabase } from "@/lib/supabase"
 import { Check, Loader as Loader2, Send } from "lucide-react"
 
 export function Claim() {
@@ -22,22 +21,29 @@ export function Claim() {
       return
     }
     setLoading(true)
-    const { error } = await supabase.from("domain_leads").insert({
-      email,
-      company,
-      message,
-      intent: "claim",
-    })
-    setLoading(false)
-    if (error) {
+    try {
+      const body = new URLSearchParams({
+        "form-name": "domain-leads",
+        email,
+        company,
+        message,
+      }).toString()
+      const res = await fetch("/__forms.html", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      })
+      if (!res.ok) throw new Error("Submission failed")
+      setDone(true)
+      toast.success("Inquiry received. We'll be in touch within 24 hours.")
+      setEmail("")
+      setCompany("")
+      setMessage("")
+    } catch {
       toast.error("Something went wrong. Please try again.")
-      return
+    } finally {
+      setLoading(false)
     }
-    setDone(true)
-    toast.success("Inquiry received. We'll be in touch within 24 hours.")
-    setEmail("")
-    setCompany("")
-    setMessage("")
   }
 
   return (
@@ -78,7 +84,11 @@ export function Claim() {
                 </Button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form name="domain-leads" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleSubmit} className="space-y-5">
+                <input type="hidden" name="form-name" value="domain-leads" />
+                <p style={{ display: "none" }}>
+                  <input name="bot-field" />
+                </p>
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="email">Work email</Label>
