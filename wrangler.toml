@@ -1,0 +1,7 @@
+name = "engineering-bot"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "engineering-bot-leads"
+database_id = "2d1e568f-2106-4d6d-9597-244b5d757466"

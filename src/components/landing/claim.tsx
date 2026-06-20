@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import { supabase } from "@/lib/supabase"
 import { Check, Loader as Loader2, Send } from "lucide-react"
 
 export function Claim() {
@@ -22,17 +21,19 @@ export function Claim() {
       return
     }
     setLoading(true)
-    const { error } = await supabase.from("domain_leads").insert({
-      email,
-      company,
-      message,
-      intent: "claim",
-    })
-    setLoading(false)
-    if (error) {
+    try {
+      const res = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, company, message, intent: "claim" }),
+      })
+      if (!res.ok) throw new Error("Request failed")
+    } catch {
+      setLoading(false)
       toast.error("Something went wrong. Please try again.")
       return
     }
+    setLoading(false)
     setDone(true)
     toast.success("Inquiry received. We'll be in touch within 24 hours.")
     setEmail("")
