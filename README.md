@@ -1,23 +1,37 @@
-# Engineering Bot
+﻿# engineering.bot
 
-A showcase for the **engineering.bot** domain — exploring what an AI-native engineering assistant looks like when built with the latest in AI and robotics infrastructure.
+**Premium exact-match `.bot` domain lander** — claim / inquire flow for [engineering.bot](https://engineering.bot).
 
-## Tech stack
+![engineering.bot open graph](public/og.png)
+
+## What it is
+
+- High-signal domain-for-sale / partnership lander  
+- Sections: why it fits, integration story, market proof, claim form  
+- Cloudflare Pages Functions for form submit (`functions/api/submit.ts`)  
+
+## Stack
 
 | Layer | Tech |
 |-------|------|
-| Frontend | TypeScript, Vite |
-| Backend | Cloudflare Pages Functions |
-| Database | Cloudflare D1 (SQLite at the edge) |
-| Hosting | Cloudflare Pages |
+| Frontend | React, TypeScript, Vite, Tailwind / shadcn-style UI |
+| API | Cloudflare Pages Functions |
+| Hosting | Cloudflare Pages (`wrangler.toml`) |
 
-## Architecture
-
-Built on Cloudflare's edge stack — D1 for data, Pages Functions for server logic, all deployed globally with zero cold starts. The frontend is a single-page TypeScript app bundled with Vite.
-
-## Run locally
+## Quick start
 
 ```bash
 npm install
-npx wrangler pages dev
+npm run dev
+npm run build
 ```
+
+## Repo layout
+
+- `src/components/landing/` — Hero, WhyFit, Integration, MarketProof, Claim, Footer  
+- `public/og.png` — social preview  
+- `functions/` — edge form handler  
+
+## License
+
+All rights reserved. Domain for sale / claim.
